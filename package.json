@@ -8,9 +8,11 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "audit:rbac": "node scripts/rbac-api-audit.mjs",
+    "audit:buttons": "node scripts/button-reality-audit.mjs",
     "audit:chain": "node scripts/oms-wms-tms-chain-audit.mjs",
     "audit:purchase-chain": "node scripts/srm-pms-wms-fms-chain-audit.mjs",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "audit:db": "node scripts/db-interface-audit.mjs"
   },
   "dependencies": {
     "@ant-design/icons": "^6.2.3",

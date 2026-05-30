@@ -1,11 +1,14 @@
 import { bills, cashFlows, pageOf, payables, profits } from '../data/mock'
 import type { Bill, BillItem, CashFlowRow, PageParams, PageResult, Payable, PaymentRecord, ProfitRow } from '../types'
-import { adaptPage, idOf, normalizePage, number, statusFromMap, text } from './helpers'
+import { adaptPage, idOf, normalizePage, number, statusFromMap, statusParam, text } from './helpers'
 import { request, shouldUseMock } from './request'
 
 type Row = Record<string, unknown>
 
 const payableStatusText: Record<number, string> = { 0: '待对账', 1: '待付款', 2: '部分付款', 3: '已结清', 4: '逾期' }
+const payableStatusValue = Object.fromEntries(Object.entries(payableStatusText).map(([value, label]) => [label, Number(value)]))
+const billStatusText: Record<number, string> = { 0: '待解析', 1: '解析中', 2: '待对账', 3: '对账完成', 4: '解析失败' }
+const billStatusValue = Object.fromEntries(Object.entries(billStatusText).map(([value, label]) => [label, Number(value)]))
 
 function adaptPayable(row: Row): Payable {
   return {
@@ -104,7 +107,12 @@ function extractRecords<T>(data: PageResult<T> | T[] | Record<string, unknown>, 
 
 export async function fetchPayables(params: PageParams): Promise<PageResult<Payable>> {
   try {
-    return adaptPage(await request<PageResult<Row>>({ url: '/api/fms/payables', params }), adaptPayable, params.pageNum, params.pageSize)
+    const query: Record<string, unknown> = { pageNum: params.pageNum, pageSize: params.pageSize }
+    const keyword = String(params.keyword || '').trim()
+    const status = statusParam(params.status, payableStatusValue)
+    if (keyword) query.keyword = keyword
+    if (status !== undefined) query.status = status
+    return adaptPage(await request<PageResult<Row>>({ url: '/api/fms/payables', params: query }), adaptPayable, params.pageNum, params.pageSize)
   } catch (error) {
     if (shouldUseMock(error)) return pageOf(payables.map((item) => adaptPayable(item as unknown as Row)), params.pageNum, params.pageSize)
     throw error
@@ -113,7 +121,12 @@ export async function fetchPayables(params: PageParams): Promise<PageResult<Paya
 
 export async function fetchBills(params: PageParams): Promise<PageResult<Bill>> {
   try {
-    return adaptPage(await request<PageResult<Row>>({ url: '/api/fms/bills', params }), adaptBill, params.pageNum, params.pageSize)
+    const query: Record<string, unknown> = { pageNum: params.pageNum, pageSize: params.pageSize }
+    const keyword = String(params.keyword || '').trim()
+    const status = statusParam(params.status, billStatusValue)
+    if (keyword) query.keyword = keyword
+    if (status !== undefined) query.status = status
+    return adaptPage(await request<PageResult<Row>>({ url: '/api/fms/bills', params: query }), adaptBill, params.pageNum, params.pageSize)
   } catch (error) {
     if (shouldUseMock(error)) return pageOf(bills.map((item) => adaptBill(item as unknown as Row)), params.pageNum, params.pageSize)
     throw error
@@ -205,15 +218,6 @@ export async function applyPayable(id: string | number) {
 export async function approvePayable(id: string | number) {
   try {
     return await request<void>({ url: `/api/fms/payables/${id}/approve`, method: 'put' })
-  } catch (error) {
-    if (shouldUseMock(error)) return undefined
-    throw error
-  }
-}
-
-export async function markPayablePaid(id: string | number) {
-  try {
-    return await request<void>({ url: `/api/fms/payables/${id}/paid`, method: 'put' })
   } catch (error) {
     if (shouldUseMock(error)) return undefined
     throw error

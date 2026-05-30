@@ -1,6 +1,6 @@
 import { RobotOutlined, ThunderboltOutlined } from '@ant-design/icons'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { Alert, App as AntApp, Button, Card, Col, Drawer, Form, Input, InputNumber, Row, Select, Space, Table, Tag, Tree, Typography } from 'antd'
+import { Alert, App as AntApp, Button, Card, Col, Form, Input, InputNumber, Modal, Row, Select, Space, Table, Tag, Tree, Typography } from 'antd'
 import type { DataNode } from 'antd/es/tree'
 import { useMemo, useState } from 'react'
 import { recommendLogisticsChannel } from '../../api/tms'
@@ -28,6 +28,8 @@ import { routeMeta } from '../../routes'
 import type { PageParams } from '../../types'
 import { formatAmount } from '../../utils/format'
 import { showConfirm } from '../../utils/feedback'
+
+const actionButtonClass = (danger?: boolean) => (danger ? 'commercial-action-button commercial-action-danger' : 'commercial-action-button')
 
 export function TmsRecommendPage() {
   const meta = routeMeta['/tms/recommend']
@@ -246,21 +248,21 @@ export function SystemUserPage() {
               title: '操作',
               width: 180,
               render: (_, row) => (
-                <Space>
-                  <Button type="link" onClick={() => openRoleDrawer(row)}>
+                <Space className="commercial-action-group">
+                  <Button size="small" className={actionButtonClass()} onClick={() => openRoleDrawer(row)}>
                     角色
                   </Button>
                   {Number(row.status) === 1 ? (
-                    <Button type="link" danger loading={statusMutation.isPending} onClick={() => confirmUserStatus(row, 0)}>
+                    <Button size="small" className={actionButtonClass(true)} danger loading={statusMutation.isPending} onClick={() => confirmUserStatus(row, 0)}>
                       停用
                     </Button>
                   ) : Number(row.status) === 0 ? (
-                    <Button type="link" loading={statusMutation.isPending} onClick={() => confirmUserStatus(row, 1)}>
+                    <Button size="small" className={actionButtonClass()} loading={statusMutation.isPending} onClick={() => confirmUserStatus(row, 1)}>
                       启用
                     </Button>
                   ) : null}
                   {Number(row.status) === 2 ? (
-                    <Button type="link" loading={unlockMutation.isPending} onClick={() => confirmUnlockUser(row)}>
+                    <Button size="small" className={actionButtonClass()} loading={unlockMutation.isPending} onClick={() => confirmUnlockUser(row)}>
                       解锁
                     </Button>
                   ) : null}
@@ -270,27 +272,28 @@ export function SystemUserPage() {
           ]}
         />
       </Card>
-      <Drawer
-        title={editingUser ? `${editingUser.realName || editingUser.username} 角色分配` : '角色分配'}
-        size={520}
+      <Modal
+        className="record-modal form-modal"
+        title={editingUser ? `${editingUser.realName || editingUser.username} ????` : '????'}
+        width="min(720px, calc(100vw - 48px))"
+        centered
         open={Boolean(editingUser)}
-        onClose={() => setEditingUser(null)}
+        onCancel={() => setEditingUser(null)}
         destroyOnHidden
-        extra={
-          <Space>
-            <Button onClick={() => setEditingUser(null)}>取消</Button>
-            <Button type="primary" loading={saveUserRolesMutation.isPending} onClick={() => saveUserRolesMutation.mutate()} disabled={!editingUser}>
-              保存
-            </Button>
-          </Space>
-        }
+        okText="??"
+        cancelText="??"
+        confirmLoading={saveUserRolesMutation.isPending}
+        okButtonProps={{ disabled: !editingUser }}
+        onOk={() => saveUserRolesMutation.mutate()}
       >
-        <Form form={roleForm} layout="vertical">
-          <Form.Item name="roleIds" label="角色">
-            <Select mode="multiple" loading={loadUserRolesMutation.isPending} options={roleOptions} placeholder="请选择角色" />
-          </Form.Item>
-        </Form>
-      </Drawer>
+        <div className="form-modal-body">
+          <Form form={roleForm} layout="vertical">
+            <Form.Item name="roleIds" label="??">
+              <Select mode="multiple" loading={loadUserRolesMutation.isPending} options={roleOptions} placeholder="?????" />
+            </Form.Item>
+          </Form>
+        </div>
+      </Modal>
     </PageWrapper>
   )
 }
@@ -402,7 +405,7 @@ export function SystemRolePage() {
               title: '操作',
               width: 120,
               render: (_, row) => (
-                <Button type="link" onClick={() => openPermissionDrawer(row)}>
+                <Button size="small" className={actionButtonClass()} onClick={() => openPermissionDrawer(row)}>
                   权限
                 </Button>
               ),
@@ -410,23 +413,24 @@ export function SystemRolePage() {
           ]}
         />
       </Card>
-      <Drawer
-        title={editingRole ? `${editingRole.roleName} 权限配置` : '权限配置'}
-        size={520}
+      <Modal
+        className="record-modal form-modal permission-modal"
+        title={editingRole ? `${editingRole.roleName} ????` : '????'}
+        width="min(760px, calc(100vw - 48px))"
+        centered
         open={Boolean(editingRole)}
-        onClose={() => setEditingRole(null)}
+        onCancel={() => setEditingRole(null)}
         destroyOnHidden
-        extra={
-          <Space>
-            <Button onClick={() => setEditingRole(null)}>取消</Button>
-            <Button type="primary" loading={saveRoleMenusMutation.isPending} onClick={() => saveRoleMenusMutation.mutate()} disabled={!editingRole}>
-              保存
-            </Button>
-          </Space>
-        }
+        okText="??"
+        cancelText="??"
+        confirmLoading={saveRoleMenusMutation.isPending}
+        okButtonProps={{ disabled: !editingRole }}
+        onOk={() => saveRoleMenusMutation.mutate()}
       >
-        <SpinTree loading={loadRoleMenusMutation.isPending} treeData={menuTreeData} checkedKeys={checkedMenuIds} onCheck={setCheckedMenuIds} />
-      </Drawer>
+        <div className="form-modal-body permission-modal-body">
+          <SpinTree loading={loadRoleMenusMutation.isPending} treeData={menuTreeData} checkedKeys={checkedMenuIds} onCheck={setCheckedMenuIds} />
+        </div>
+      </Modal>
     </PageWrapper>
   )
 }
@@ -576,7 +580,7 @@ export function MessageCenterPage() {
               width: 110,
               render: (_, row) =>
                 Number(row.readStatus) === 0 ? (
-                  <Button type="link" loading={markReadMutation.isPending} onClick={() => markReadMutation.mutate(row.id)}>
+                  <Button size="small" className={actionButtonClass()} loading={markReadMutation.isPending} onClick={() => markReadMutation.mutate(row.id)}>
                     标记已读
                   </Button>
                 ) : (

@@ -39,7 +39,10 @@ function adaptOrder(row: Row): Order {
     amount: number(row.paymentAmount || row.payAmount || row.totalAmount || row.amount),
     currency: text(row.currency, 'USD'),
     status: statusFromMap(row.status, orderStatusText, '待处理'),
+    warehouseId: text(row.warehouseId, ''),
     warehouse: text(row.warehouseName || row.warehouse, '-'),
+    waybillNo: text(row.waybillNo, ''),
+    logisticsChannel: text(row.logisticsChannel, ''),
     deliveryDeadline: text(row.deliveryDeadline, '-'),
     abnormal: Boolean(row.abnormal || row.isAbnormal || row.isException),
   }

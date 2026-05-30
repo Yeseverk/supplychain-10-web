@@ -312,6 +312,10 @@ export type OutboundOrder = {
   id: string
   outboundNo: string
   orderNo: string
+  orderId?: string
+  warehouseId?: string
+  refType?: string
+  refNo?: string
   warehouse: string
   status: string
   plannedQty: number
@@ -364,7 +368,10 @@ export type Order = {
   amount: number
   currency: string
   status: string
+  warehouseId?: string
   warehouse: string
+  waybillNo?: string
+  logisticsChannel?: string
   deliveryDeadline: string
   abnormal?: boolean
 }

@@ -3,6 +3,9 @@
 }
 
 :root {
+  --theme-green: #0f766e;
+  --theme-green-soft: #f4f9f7;
+  --theme-green-border: rgba(198, 214, 204, 0.9);
   --primary-color: #4f46e5;
   --primary-hover: #4338ca;
   --bg-color: #f5f5f7;
@@ -593,6 +596,201 @@ input {
 
 .table-card .ant-table-pagination {
   margin: 16px 24px !important;
+}
+
+
+.commercial-action-group {
+  display: inline-flex;
+  width: 100%;
+  max-width: 280px;
+  align-items: center;
+  justify-content: center;
+  gap: 6px !important;
+  margin: 0 auto;
+}
+
+.commercial-action-group .ant-space-item {
+  display: inline-flex;
+}
+
+.commercial-action-button.ant-btn {
+  min-width: 48px;
+  height: 28px;
+  padding: 0 10px;
+  border-radius: 7px;
+  border-color: rgba(14, 116, 144, 0.18);
+  color: #036672;
+  background: rgba(236, 253, 245, 0.72);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0;
+  box-shadow: none;
+}
+
+.commercial-action-button.ant-btn:hover {
+  border-color: rgba(13, 148, 136, 0.34) !important;
+  color: #0f766e !important;
+  background: rgba(209, 250, 229, 0.88) !important;
+}
+
+.commercial-action-danger.ant-btn {
+  border-color: rgba(220, 38, 38, 0.16);
+  color: #dc2626;
+  background: rgba(220, 38, 38, 0.045);
+}
+
+.commercial-action-danger.ant-btn:hover {
+  border-color: rgba(220, 38, 38, 0.32) !important;
+  color: #b91c1c !important;
+  background: rgba(220, 38, 38, 0.09) !important;
+}
+
+.commercial-action-empty {
+  display: inline-block;
+  width: 100%;
+  min-height: 28px;
+}
+
+.record-modal {
+  max-width: 800px;
+}
+
+.record-modal .ant-modal-content {
+  overflow: hidden;
+  border: 1px solid var(--theme-green-border);
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.99) 0%, rgba(244, 249, 247, 0.99) 100%);
+  box-shadow: 0 24px 56px rgba(15, 23, 42, 0.18);
+}
+
+.record-modal .ant-modal-header {
+  margin: 0;
+  padding: 20px 26px;
+  border-bottom: 1px solid rgba(198, 214, 204, 0.78);
+  background: var(--theme-green-soft);
+}
+
+.record-modal .ant-modal-title {
+  color: #0f172a;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.record-modal .ant-modal-close {
+  top: 14px;
+  border-radius: 8px;
+}
+
+.record-modal .ant-modal-body {
+  padding: 24px 28px 28px;
+  max-height: min(76vh, 720px);
+  overflow: auto;
+  background: transparent;
+}
+
+.form-modal {
+  max-width: 860px;
+}
+
+.form-modal .ant-modal-body {
+  padding: 0;
+  max-height: none;
+  overflow: hidden;
+}
+
+.form-modal-body {
+  max-height: min(70vh, 720px);
+  overflow: auto;
+  padding: 24px 28px 8px;
+}
+
+.form-modal .ant-modal-footer {
+  margin-top: 0;
+  padding: 14px 24px 18px;
+  border-top: 1px solid rgba(198, 214, 204, 0.72);
+  background: rgba(248, 252, 250, 0.96);
+}
+
+.form-modal .ant-form-item-label > label {
+  color: #1f2937;
+  font-weight: 700;
+}
+
+.form-modal .ant-input,
+.form-modal .ant-input-number,
+.form-modal .ant-select-selector,
+.form-modal textarea.ant-input {
+  border-radius: 9px !important;
+}
+
+.form-modal textarea.ant-input {
+  min-height: 92px;
+}
+
+.record-modal-body {
+  min-height: 240px;
+}
+
+.record-descriptions.ant-descriptions-bordered {
+  overflow: hidden;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.86);
+}
+
+.record-descriptions.ant-descriptions-bordered .ant-descriptions-item-label {
+  width: 150px;
+  color: #53635c;
+  background: rgba(240, 250, 246, 0.86);
+  font-weight: 700;
+}
+
+.record-descriptions.ant-descriptions-bordered .ant-descriptions-item-content {
+  color: #0f172a;
+  background: rgba(255, 255, 255, 0.96);
+  font-weight: 500;
+  word-break: break-word;
+}
+
+.record-modal-table {
+  overflow: hidden;
+  border: 1px solid rgba(198, 214, 204, 0.62);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.88);
+}
+
+.record-modal-table .ant-table {
+  background: transparent;
+}
+
+.record-modal-table .ant-table-thead > tr > th {
+  padding: 12px 14px;
+  color: #334155;
+  background: rgba(240, 250, 246, 0.9) !important;
+  font-size: 13px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.record-modal-table .ant-table-tbody > tr > td {
+  padding: 12px 14px;
+  color: #1f2937;
+  background: rgba(255, 255, 255, 0.95);
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .record-modal {
+    max-width: calc(100vw - 24px);
+  }
+
+  .record-modal .ant-modal-body {
+    padding: 16px;
+    max-height: 74vh;
+  }
+
+  .record-descriptions.ant-descriptions-bordered .ant-descriptions-item-label {
+    width: 118px;
+  }
 }
 
 .compact-alert {

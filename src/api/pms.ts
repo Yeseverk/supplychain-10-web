@@ -268,6 +268,15 @@ export async function comparePurchaseInquiry(reqId: string | number): Promise<Re
   }
 }
 
+export async function createPurchaseInquiry(data: Record<string, unknown>) {
+  try {
+    return await request<string | number>({ url: '/api/pms/inquiries', method: 'post', data })
+  } catch (error) {
+    if (shouldUseMock(error)) return Date.now()
+    throw error
+  }
+}
+
 export async function selectPurchaseInquiry(id: string | number) {
   try {
     return await request<void>({ url: `/api/pms/inquiries/${id}/select`, method: 'put' })

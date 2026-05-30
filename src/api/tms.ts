@@ -90,6 +90,13 @@ export type CreateChannelPayload = {
   remark?: string
 }
 
+export type LogisticsCarrier = {
+  id: string
+  carrierCode: string
+  carrierName: string
+  status: string
+}
+
 const waybillStatusText: Record<number, string> = {
   0: '待揽收',
   1: '已揽收',
@@ -151,6 +158,15 @@ function adaptChannel(row: Row): LogisticsChannel {
     channelName: text(row.channelName, '-'),
     carrierName: inferCarrierName(row),
     countryCodes: text(row.countryCodes, '-'),
+    status: statusFromMap(row.status, channelStatusText, '正常'),
+  }
+}
+
+function adaptCarrier(row: Row): LogisticsCarrier {
+  return {
+    id: idOf(row),
+    carrierCode: text(row.carrierCode, '-'),
+    carrierName: text(row.carrierName, '-'),
     status: statusFromMap(row.status, channelStatusText, '正常'),
   }
 }
@@ -240,6 +256,10 @@ export async function fetchLogisticsChannels(params: PageParams): Promise<PageRe
     }
     throw error
   }
+}
+
+export async function fetchLogisticsCarriers(params: PageParams): Promise<PageResult<LogisticsCarrier>> {
+  return adaptPage(await request<PageResult<Row>>({ url: '/api/tms/carriers', params }), adaptCarrier, params.pageNum, params.pageSize)
 }
 
 export async function createLogisticsChannel(payload: CreateChannelPayload) {

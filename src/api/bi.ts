@@ -167,3 +167,35 @@ export async function convertReorderToPurchase(suggestion?: Pick<ReorderSuggesti
     throw error
   }
 }
+
+export type AiTemplate = {
+  name: string
+  question: string
+}
+
+export type AiQueryResult = {
+  question?: string
+  sqlGenerated?: string
+  tableData?: Record<string, unknown>[]
+  aiAnalysis?: string
+  chartType?: string
+  processingTimeMs?: number
+}
+
+export async function fetchAiTemplates(): Promise<AiTemplate[]> {
+  try {
+    return await request<AiTemplate[]>({ url: '/api/bi/ai/templates' })
+  } catch (error) {
+    if (shouldUseMock(error)) return []
+    throw error
+  }
+}
+
+export async function queryAiAnalysis(question: string): Promise<AiQueryResult> {
+  try {
+    return await request<AiQueryResult>({ url: '/api/bi/ai/query', method: 'post', data: { question } })
+  } catch (error) {
+    if (shouldUseMock(error)) return { question, tableData: [], aiAnalysis: '当前未连接真实 AI 查询服务。' }
+    throw error
+  }
+}

@@ -7,9 +7,10 @@ import { DefaultLayout } from './layouts/DefaultLayout'
 import { LoginPage } from './pages/LoginPage'
 import { CommercialListPage } from './pages/commercial/CommercialListPage'
 import { pageConfigs } from './pages/commercial/pageConfigs'
-import { AiQueryPage, MessageCenterPage, SystemRolePage, SystemUserPage, TmsRecommendPage } from './pages/commercial/ActionPages'
+import { MessageCenterPage, SystemRolePage, SystemUserPage } from './pages/commercial/ActionPages'
 import { useAuthStore } from './store/auth'
 import { routeMeta } from './routes'
+import { RealAiQueryPage, RealTmsRecommendPage } from './pages/commercial/RealActionPages'
 import { setFeedbackApi } from './utils/feedback'
 import './index.css'
 
@@ -70,14 +71,14 @@ function AppRoutes() {
           <Route path="oms/refund" element={<CommercialListPage config={pageConfigs.refunds} />} />
           <Route path="tms/waybill" element={<CommercialListPage config={pageConfigs.waybills} />} />
           <Route path="tms/channel" element={<CommercialListPage config={pageConfigs.channels} />} />
-          <Route path="tms/recommend" element={<TmsRecommendPage />} />
+          <Route path="tms/recommend" element={<RealTmsRecommendPage />} />
           <Route path="fms/payable" element={<CommercialListPage config={pageConfigs.payables} />} />
           <Route path="fms/bill" element={<CommercialListPage config={pageConfigs.bills} />} />
           <Route path="fms/profit" element={<CommercialListPage config={pageConfigs.profits} />} />
           <Route path="fms/cashflow" element={<CommercialListPage config={pageConfigs.cashflows} />} />
           <Route path="bi/kpi" element={<CommercialListPage config={pageConfigs.kpis} />} />
           <Route path="bi/reorder" element={<CommercialListPage config={pageConfigs.reorder} />} />
-          <Route path="bi/ai" element={<AiQueryPage />} />
+          <Route path="bi/ai" element={<RealAiQueryPage />} />
           <Route path="system/user" element={<SystemUserPage />} />
           <Route path="system/role" element={<SystemRolePage />} />
           <Route path="system/message" element={<MessageCenterPage />} />
