@@ -274,14 +274,14 @@ export function SystemUserPage() {
       </Card>
       <Modal
         className="record-modal form-modal"
-        title={editingUser ? `${editingUser.realName || editingUser.username} ????` : '????'}
+        title="分配用户角色"
         width="min(720px, calc(100vw - 48px))"
         centered
         open={Boolean(editingUser)}
         onCancel={() => setEditingUser(null)}
         destroyOnHidden
-        okText="??"
-        cancelText="??"
+        okText="保存"
+        cancelText="取消"
         confirmLoading={saveUserRolesMutation.isPending}
         okButtonProps={{ disabled: !editingUser }}
         onOk={() => saveUserRolesMutation.mutate()}
@@ -415,14 +415,14 @@ export function SystemRolePage() {
       </Card>
       <Modal
         className="record-modal form-modal permission-modal"
-        title={editingRole ? `${editingRole.roleName} ????` : '????'}
+        title="分配角色权限"
         width="min(760px, calc(100vw - 48px))"
         centered
         open={Boolean(editingRole)}
         onCancel={() => setEditingRole(null)}
         destroyOnHidden
-        okText="??"
-        cancelText="??"
+        okText="保存"
+        cancelText="取消"
         confirmLoading={saveRoleMenusMutation.isPending}
         okButtonProps={{ disabled: !editingRole }}
         onOk={() => saveRoleMenusMutation.mutate()}
