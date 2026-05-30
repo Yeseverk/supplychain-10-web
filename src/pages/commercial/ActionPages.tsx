@@ -288,8 +288,8 @@ export function SystemUserPage() {
       >
         <div className="form-modal-body">
           <Form form={roleForm} layout="vertical">
-            <Form.Item name="roleIds" label="??">
-              <Select mode="multiple" loading={loadUserRolesMutation.isPending} options={roleOptions} placeholder="?????" />
+            <Form.Item name="roleIds" label="角色">
+              <Select mode="multiple" loading={loadUserRolesMutation.isPending} options={roleOptions} placeholder="请选择角色" />
             </Form.Item>
           </Form>
         </div>

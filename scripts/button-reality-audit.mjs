@@ -39,6 +39,7 @@ const pageConfig = read('src/pages/commercial/pageConfigs.tsx')
 const commercialListPage = read('src/pages/commercial/CommercialListPage.tsx')
 const actionPages = read('src/pages/commercial/ActionPages.tsx')
 const realActionPages = read('src/pages/commercial/RealActionPages.tsx')
+const purchaseOrderDetailPage = read('src/pages/pms/PurchaseOrderDetailPage.tsx')
 const requestApi = read('src/api/request.ts')
 const packageJson = JSON.parse(read('package.json'))
 
@@ -83,6 +84,16 @@ const systemMutationRefreshCoverage =
   actionPages.includes('markReadMutation') &&
   (actionPages.match(/void refetch\(\)/g) || []).length >= 6
 const aiResultTablePolished = realActionPages.includes('aiResultFieldLabels') && realActionPages.includes('aiResultLabel(key)') && realActionPages.includes('aiResultColumnWidth(key)')
+const duplicateClickGuards =
+  realActionPages.includes('loading={recommendMutation.isPending}') &&
+  realActionPages.includes('loading={queryMutation.isPending}') &&
+  purchaseOrderDetailPage.includes('loading={sendMutation.isPending}') &&
+  purchaseOrderDetailPage.includes('showConfirm({')
+const externalApiErrorCopy =
+  realActionPages.includes('recommendMutation.isError') &&
+  realActionPages.includes('queryMutation.isError') &&
+  realActionPages.includes('templatesError') &&
+  realActionPages.includes('compact-alert')
 const recordDetailSingleColumn = commercialListPage.includes('column={1}')
 const mutationRefreshCoverage =
   commercialListPage.includes('void refetch()') &&
@@ -192,6 +203,8 @@ const result = {
   systemActionButtonsStyled,
   systemMutationRefreshCoverage,
   aiResultTablePolished,
+  duplicateClickGuards,
+  externalApiErrorCopy,
   recordDetailUsesModal,
   recordModalPolished,
   missingRecordLabels,
@@ -216,6 +229,8 @@ if (!systemPagesUseModal) failures.push('system/rbac/message pages still contain
 if (!systemActionButtonsStyled) failures.push('system/rbac/message action buttons still use link style or miss unified styling')
 if (!systemMutationRefreshCoverage) failures.push('system/rbac/message mutations do not refresh after success')
 if (!aiResultTablePolished) failures.push('AI result table still uses raw backend keys as column titles')
+if (!duplicateClickGuards) failures.push('high-risk submit buttons do not all have loading/confirm guards')
+if (!externalApiErrorCopy) failures.push('external API pages lack explicit service-specific error copy')
 if (!recordDetailUsesModal) failures.push('record detail view is not using the centered modal presentation')
 if (!recordModalPolished) failures.push('record modal table/detail rendering is not polished enough')
 if (!recordDetailSingleColumn) failures.push('record detail descriptions should use a single-column layout to avoid squeezed values')
